@@ -1,51 +1,85 @@
+const fs = require('fs');
+if (fs.existsSync('config.env')) require('dotenv').config({ path: './config.env' });
 
-// change only what you are ask to change else bit won't work thanks for your understanding 
-const fs = require('fs'), 
-      dotenv = fs.existsSync('config.env') ? require('dotenv').config({ path: '/.env' }) : undefined,
-      convertToBool = (text, fault = 'true') => text === fault;
+function convertToBool(text, fault = 'true') {
+    return String(text).toLowerCase() === String(fault).toLowerCase();
+}
 
-//add your session id
-
-global.session = "https://khanxmd-pair.onrender.com"; 
- 
- 
 module.exports = {
-SESSION_ID: process.env.SESSION_ID || "", // Add sess Id here espwcially when deploying on panels else use app.json and .env file...
-SUDO_NUMBERS: process.env.SUDO_NUMBERS || "", //Add multiple Numbers with Country Codes without (+) Separated by Comma...
-ANTI_DELETE: process.env.ANTI_DELETE || "true", // can be set to inboxonly/allchats/true/false
-AUTO_READ_STATUS: process.env.AUTO_READ_STATUS || "true",
-AUTO_LIKE_STATUS: process.env.AUTO_LIKE_STATUS || "true",
-AUTO_LIKE_EMOJIS: process.env.AUTO_LIKE_EMOJIS || "💛,❤️,💜,🤍,💙", //Input Yours Custom...Can be one Emoji or Multiple Emojis Separated by Commas
-AUTO_REPLY_STATUS: process.env.AUTO_REPLY_STATUS || "false",
-STATUS_REPLY_MSG: process.env.STATUS_REPLY_MSG || "✅️ Status Viewed By JAWAD MD", // // Input Yours custom...
-MODE: process.env.MODE || "public", // Put private or public or inbox or groups
-OWNER_NUMBER: process.env.OWNER_NUMBER || "923427582273", // Only 1 owner Number Here, others Add to sudo numbers...
-OWNER_NAME: process.env.OWNER_NAME || "JawadTech", // Input Yours custom...(Maintain font for Flow)
-PACK_AUTHOR: process.env.PACK_AUTHOR || "🩵", // Added // Input Yours custom...
-PACK_NAME: process.env.PACK_NAME || "💙", // Added // Input Yours custom...
-PREFIX: process.env.PREFIX || ".",
-VERSION: process.env.VERSION || "3.0.0",
-ANTILINK: process.env.ANTILINK || "true", //  Enter true to kick automatically or delete to delete without kicking or warn to warn before kicking
-ANTICALL: process.env.ANTICALL || "false",
-ANTIBAD: process.env.ANTIBAD || "false",
-BAD_WORDS: process.env.BAD_WORDS || "null, pm, dm, idiot", // Add Yours Separated by Comma(will be deleted if ANTIBAD is set to true)
-ANTICALL_MSG: process.env.ANTICALL_MSG || "*_📞 Auto Call Reject Mode Active. 📵 No Calls Allowed!_*",
-AUTO_REACT: process.env.AUTO_REACT || "false",
-BOT_NAME: process.env.BOT_NAME || "JAWAD-MD", //  don't change 
-BOT_PIC: process.env.BOT_PIC || "https://files.catbox.moe/pf270b.jpg", //  don't change 
-AUTO_AUDIO: process.env.AUTO_AUDIO || "false",
-AUTO_BIO: process.env.AUTO_BIO || "false",
-AUTO_BIO_QUOTE: process.env.AUTO_BIO_QUOTE || "i am jawad md",
-CHAT_BOT: process.env.CHAT_BOT || "false", // Put value to true to enablle for all chats only or inbox to ebanle in pm chats only or groups to enable in groups only else false
-WELCOME: process.env.WELCOME || "false",
-//not working for the moment do don't on it
-GOODBYE: process.env.GOODBYE || "false", //not working for the moment do don't on it
-AUTO_READ_MESSAGES: process.env.AUTO_READ_MESSAGES || "false", // Enter value to true for blueticking all messages, or commands for blueticking only commands else false
-AUTO_BLOCK: process.env.AUTO_BLOCK || "333,799", // Add Multiple Country Codes Separated by Comma...
-PRESENCE: process.env.PRESENCE || "online", // Choose one: typing, recording, online, null
-TIME_ZONE: process.env.TIME_ZONE || "Asia/Karachi", // Enter yours else leave blank if not sure
-};
+    // 🔐 SESSION
+    SESSION_ID: process.env.SESSION_ID || "",
 
-let file = require.resolve(__filename); 
-fs.watchFile(file, () => { fs.unwatchFile(file); console.log(`Update '${__filename}'`); delete require.cache[file]; require(file); });
-//KHAN MD; 🔥💸💀
+    // 👀 STATUS FEATURES
+    AUTO_STATUS_SEEN: process.env.AUTO_STATUS_SEEN || "true", // true/false
+    AUTO_STATUS_REPLY: process.env.AUTO_STATUS_REPLY || "false",
+    AUTO_STATUS_REACT: process.env.AUTO_STATUS_REACT || "true",
+    AUTO_STATUS_MSG: process.env.AUTO_STATUS_MSG || "*SEEN YOUR STATUS BY EXTRA-MD🤍*",
+
+    // 👋 GROUP EVENTS
+    WELCOME: process.env.WELCOME || "true",
+    ADMIN_EVENTS: process.env.ADMIN_EVENTS || "false",
+
+    // 🌍 TIMEZONE
+    DEFAULT_TIMEZONE: process.env.DEFAULT_TIMEZONE || "Africa/Kampala",
+
+    // 🧩 ANTI-LINK CONFIGURATION — FIXED ✅
+    ANTI_LINK: {
+        ENABLED: process.env.ANTI_LINK_ENABLED
+            ? process.env.ANTI_LINK_ENABLED === "true"
+            : true, // Default true if not set
+        DEFAULT_MODE: process.env.ANTI_LINK_MODE || "warn",  // warn | kick | delete | off
+        DEFAULT_WARNINGS: parseInt(process.env.ANTI_LINK_WARNINGS || "3")
+    },
+    
+  FONT_STYLE: process.env.FONT_STYLE || "smallcaps",
+    
+
+    // 💬 MENTION REPLY
+    MENTION_REPLY: process.env.MENTION_REPLY || "false",
+
+    // 🖼️ MENU IMAGE / MEDIA
+    MENU_IMAGE_URL: process.env.MENU_IMAGE_URL || "https://files.catbox.moe/awraja.jpg",
+
+    // ⚙️ BOT BEHAVIOR
+    PREFIX: process.env.PREFIX || ".",
+    BOT_NAME: process.env.BOT_NAME || "RONY SKIES",
+    PREMIUM_TOKEN: process.env.PREMIUM_TOKEN || "",
+
+    // 🩷 STICKER CONFIG
+    STICKER_NAME: process.env.STICKER_NAME || "RONY-MD",
+
+    // 🧠 CUSTOM REACTIONS
+    CUSTOM_REACT: process.env.CUSTOM_REACT || "false",
+    CUSTOM_REACT_EMOJIS: process.env.CUSTOM_REACT_EMOJIS ||
+        "💝,💖,💗,❤️‍🩹,❤️,🧡,💛,💚,💙,💜,🤎,🖤,🤍",
+
+    // 👑 OWNER INFO
+    OWNER_NUMBER: process.env.OWNER_NUMBER || "27696397895",
+    OWNER_NAME: process.env.OWNER_NAME || "Rony skies",
+    DESCRIPTION: process.env.DESCRIPTION || "*© POWERED BY RONY_SKIES*",
+
+    // 💀 ALIVE SETTINGS
+    ALIVE_IMG: process.env.ALIVE_IMG || "https://files.catbox.moe/z62ts0.jpg",
+    LIVE_MSG: process.env.LIVE_MSG || "> *RONY-MD*⚡",
+
+    // ⚡ BOT BEHAVIOR TOGGLES
+    READ_MESSAGE: process.env.READ_MESSAGE || "false",
+    AUTO_REACT: process.env.AUTO_REACT || "false",
+    ANTI_BAD: process.env.ANTI_BAD || "false",
+    MODE: process.env.MODE || "public",
+
+    AUTO_VOICE: process.env.AUTO_VOICE || "false",
+    AUTO_STICKER: process.env.AUTO_STICKER || "false",
+    AUTO_REPLY: process.env.AUTO_REPLY || "false",
+
+    ALWAYS_ONLINE: process.env.ALWAYS_ONLINE || "false",
+    PUBLIC_MODE: process.env.PUBLIC_MODE || "true",
+    AUTO_TYPING: process.env.AUTO_TYPING || "true",
+    READ_CMD: process.env.READ_CMD || "false",
+
+
+    // ⚔️ SECURITY
+    ANTI_VV: process.env.ANTI_VV || "true",
+    ANTI_DELETE: process.env.ANTI_DELETE || "off",
+    AUTO_RECORDING: process.env.AUTO_RECORDING || "false"
+};
