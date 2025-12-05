@@ -1,156 +1,100 @@
-const { malvinid } = require('./id'); 
+const PastebinAPI = require('pastebin-js'),
+pastebin = new PastebinAPI('EMWTMkQAVfJa9kM-MRUrxd5Oku1U7pgL')
+const {makeid} = require('./id');
 const express = require('express');
 const fs = require('fs');
-let router = express.Router();
+let router = express.Router()
 const pino = require("pino");
-const { Storage } = require("megajs");
-
 const {
-    default: Malvin_Tech,
+    default: Gifted_Tech,
     useMultiFileAuthState,
     delay,
     makeCacheableSignalKeyStore,
     Browsers
-} = require("@whiskeysockets/baileys");
+} = require("maher-zubair-baileys");
 
-// Function to generate a random Mega ID
-function randomMegaId(length = 6, numberLength = 4) {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    const number = Math.floor(Math.random() * Math.pow(10, numberLength));
-    return `${result}${number}`;
-}
-
-// Function to upload credentials to Mega
-async function uploadCredsToMega(credsPath) {
-    try {
-        const storage = await new Storage({
-            email: 'zimtk4@gmail.com', // Your Mega A/c Email Here
-            password: 'takumsax2007@$' // Your Mega A/c Password Here
-        }).ready;
-        console.log('Mega storage initialized.');
-
-        if (!fs.existsSync(credsPath)) {
-            throw new Error(`File not found: ${credsPath}`);
-        }
-
-        const fileSize = fs.statSync(credsPath).size;
-        const uploadResult = await storage.upload({
-            name: `${randomMegaId()}.json`,
-            size: fileSize
-        }, fs.createReadStream(credsPath)).complete;
-
-        console.log('Session successfully uploaded to Mega.');
-        const fileNode = storage.files[uploadResult.nodeId];
-        const megaUrl = await fileNode.link();
-        console.log(`Session Url: ${megaUrl}`);
-        return megaUrl;
-    } catch (error) {
-        console.error('Error uploading to Mega:', error);
-        throw error;
-    }
-}
-
-// Function to remove a file
-function removeFile(FilePath) {
-    if (!fs.existsSync(FilePath)) return false;
-    fs.rmSync(FilePath, { recursive: true, force: true });
-}
-
-// Router to handle pairing code generation
+function removeFile(FilePath){
+    if(!fs.existsSync(FilePath)) return false;
+    fs.rmSync(FilePath, { recursive: true, force: true })
+ };
 router.get('/', async (req, res) => {
-    const id = malvinid(); 
+    const id = makeid();
     let num = req.query.number;
-
-    async function RONY_PAIR_CODE() {
-        const { state, saveCreds } = await useMultiFileAuthState('./temp/' + id);
-
-        try {
-            let Ronysk = Rony_Skies({
+        async function GIFTED_MD_PAIR_CODE() {
+        const {
+            state,
+            saveCreds
+        } = await useMultiFileAuthState('./temp/'+id)
+     try {
+            let Pair_Code_By_Gifted_Tech = Gifted_Tech({
                 auth: {
                     creds: state.creds,
-                    keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
+                    keys: makeCacheableSignalKeyStore(state.keys, pino({level: "fatal"}).child({level: "fatal"})),
                 },
                 printQRInTerminal: false,
-                logger: pino({ level: "fatal" }).child({ level: "fatal" }),
-                browser: Browsers.macOS("Safari")
-            });
-
-            if (!Ronysk.authState.creds.registered) {
+                logger: pino({level: "fatal"}).child({level: "fatal"}),
+                browser: ["Chrome (Linux)", "", ""]
+             });
+             if(!Pair_Code_By_Gifted_Tech.authState.creds.registered) {
                 await delay(1500);
-                num = num.replace(/[^0-9]/g, '');
-                const code = await Ronysk.requestPairingCode(num);
-                console.log(`Your Code: ${code}`);
+                        num = num.replace(/[^0-9]/g,'');
+                            const code = await Pair_Code_By_Gifted_Tech.requestPairingCode(num)
+                 if(!res.headersSent){
+                 await res.send({code});
+                     }
+                 }
+            Pair_Code_By_Gifted_Tech.ev.on('creds.update', saveCreds)
+            Pair_Code_By_Gifted_Tech.ev.on("connection.update", async (s) => {
+                const {
+                    connection,
+                    lastDisconnect
+                } = s;
+                if (connection == "open") {
+                await delay(5000);
+                let data = fs.readFileSync(__dirname + `/temp/${id}/creds.json`);
+                await delay(800);
+               let b64data = Buffer.from(data).toString('base64');
+               let session = await Pair_Code_By_Gifted_Tech.sendMessage(Pair_Code_By_Gifted_Tech.user.id, { text: '' + b64data });
 
-                if (!res.headersSent) {
-                    res.send({ code });
-                }
-            }
+               let GIFTED_MD_TEXT = `
+*_Pair Code Connected by WASI TECH*
+*_Made With 🤍_*
+______________________________________
+╔════◇
+║ *『 WOW YOU'VE CHOSEN WASI MD 』*
+║ _You Have Completed the First Step to Deploy a Whatsapp Bot._
+╚════════════════════════╝
+╔═════◇
+║  『••• 𝗩𝗶𝘀𝗶𝘁 𝗙𝗼𝗿 𝗛𝗲𝗹𝗽 •••』
+║❒ *Ytube:* _youtube.com/@wasitech1_
+║❒ *Owner:* _https://wa.me/923192173398_
+║❒ *Repo:* _https://github.com/wasixd/WASI-MD
+║❒ *WaGroup:* _https://whatsapp.com/channel/0029VaDK8ZUDjiOhwFS1cP2j
+║❒ *WaChannel:* _https://whatsapp.com/channel/0029VaDK8ZUDjiOhwFS1cP2j
+║❒ *Plugins:* _https://github.com/wasixd/WASI-MD-PLUGINS_
+╚════════════════════════╝
+_____________________________________
 
-            Ronysk.ev.on('creds.update', saveCreds);
-            Ronysk.ev.on("connection.update", async (s) => {
-                const { connection, lastDisconnect } = s;
+_Don't Forget To Give Star To My Repo_`
+ await Pair_Code_By_Gifted_Tech.sendMessage(Pair_Code_By_Gifted_Tech.user.id,{text:GIFTED_MD_TEXT},{quoted:session})
+ 
 
-                if (connection === "open") {
-                    await delay(5000);
-                    const filePath = __dirname + `/temp/${id}/creds.json`;
-
-                    if (!fs.existsSync(filePath)) {
-                        console.error("File not found:", filePath);
-                        return;
-                    }
-
-                    const megaUrl = await uploadCredsToMega(filePath);
-                    const sid = megaUrl.includes("https://mega.nz/file/")
-                        ? 'COOLEST-MD~' + megaUrl.split("https://mega.nz/file/")[1]
-                        : 'Error: Invalid URL';
-
-                    console.log(`Session ID: ${sid}`);
-
-                    const session = await Ronysk.sendMessage(Ronysk.user.id, { text: sid });
-
-                    const RONYSK_TEXT = `
-🎉 *Welcome to RONYSK-MD!* 🚀  
-
-🔒 *Your Session ID* is ready!  ⚠️ _Keep it private and secure — dont share it with anyone._ 
-
-🔑 *Copy & Paste the SESSION_ID Above*🛠️ Add it to your environment variable: *SESSION_ID*.  
-
-💡 *Whats Next?* 
-1️⃣ Explore all the cool features of RONYSK-MD.
-2️⃣ Stay updated with our latest releases and support.
-3️⃣ Enjoy seamless WhatsApp automation! 🤖  
-
-🔗 *Join Our Support Channel:* 👉 [Click Here to Join] (https://whatsapp.com/channel/0029VbBnRol1XquTPCwUsk15) 
-
-⭐ *Show Some Love!* Give us a ⭐ on GitHub and support the developer of: 👉 [Zimtk GitHub Repo](https://github.com/ronaldomazive915-source)  
-
-🚀 _Thanks for choosing RONYSK MD— Let the automation begin!_ ✨`;
-
-                    await Ronysk.sendMessage(Ronysk.user.id, { text: RONYSK_TEXT }, { quoted: session });
-
-                    await delay(100);
-                    await Ronysk.ws.close();
-                    return removeFile('./temp/' + id);
-                } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode !== 401) {
+        await delay(100);
+        await Pair_Code_By_Gifted_Tech.ws.close();
+        return await removeFile('./temp/'+id);
+            } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode != 401) {
                     await delay(10000);
-                    RONYSK_PAIR_CODE();
+                    GIFTED_MD_PAIR_CODE();
                 }
             });
         } catch (err) {
-            console.error("Service Has Been Restarted:", err);
-            removeFile('./temp/' + id);
-
-            if (!res.headersSent) {
-                res.send({ code: "Service is Currently Unavailable" });
-            }
+            console.log("service restated");
+            await removeFile('./temp/'+id);
+         if(!res.headersSent){
+            await res.send({code:"Service Unavailable"});
+         }
         }
     }
-
-    await TAKLEX_PAIR_CODE();
+    return await GIFTED_MD_PAIR_CODE()
 });
-
-module.exports = router;
+module.exports = router
